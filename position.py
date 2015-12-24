@@ -11,7 +11,7 @@ class Position(object):
 		self.avg_sell = 0
 		self.assets = []
 
-	def print_pos(self, last_sell):
+	def print_pos(self):
 		print "Assets: "
 		print self.assets
 		self.netval = self.total_sell - self.total_buy

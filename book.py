@@ -3,11 +3,9 @@ import pprint as pp
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 class Book(object):
 	def __init__(self, book):
 		self.book = book
-		self.ts = book['ts']
 		self.venue = book['venue']
 		self.ok = book['ok']
 		self.asks = book['asks']
@@ -115,7 +113,7 @@ class Book(object):
 					min_ask = ask['price']
 				elif min_ask < ask['price']:
 					min_ask = ask['price']
-		return min_ask/100.0
+		return min_ask
 
 	def maximum_bid(self):
 		max_bid = -1.0
@@ -125,7 +123,7 @@ class Book(object):
 					max_bid = bid['price']
 				elif max_bid > bid['price']:
 					max_bid = bid['price']
-		return max_bid/100.0
+		return max_bid
 
 	def maximum_ask(self):
 		max_ask = -1.0
@@ -135,7 +133,7 @@ class Book(object):
 					max_ask = ask['price']
 				elif max_ask > ask['price']:
 					max_ask = ask['price']
-		return max_ask/100.0
+		return max_ask
 
 	def minimum_bid(self):
 		min_bid = -1.0
@@ -145,7 +143,7 @@ class Book(object):
 					min_bid = bid['price']
 				elif min_bid > bid['price']:
 					min_bid = bid['price']
-		return min_bid/100.0
+		return min_bid
 
 	def total_asks(self):
 		total = 0
@@ -164,12 +162,16 @@ class Book(object):
 	def spread(self):
 		return self.minimum_ask() - self.maximum_bid()
 
+	def center(self):
+		return self.maximum_bid() + self.spread()/2
+
 	def totals(self):
 		outstr = 'Total Asks: {}\n'.format(self.total_asks())
 		outstr += 'Total Bids: {}\n'.format(self.total_bids()) 
-		outstr += 'Minimum Ask: ${:.2f}\n'.format(self.minimum_ask())
-		outstr += 'Maximum Bid: ${:.2f}\n'.format(self.maximum_bid())
-		outstr += 'Spread: ${:.2f}\n'.format(self.spread())
+		outstr += 'Minimum Ask: ${:.2f}\n'.format(self.minimum_ask()/100.0)
+		outstr += 'Maximum Bid: ${:.2f}\n'.format(self.maximum_bid()/100.0)
+		outstr += 'Spread: ${:.2f}\n'.format(self.spread()/100.0)
+		outstr += 'Center: ${:.2f}\n'.format(self.center()/100.0)
 
 		return outstr
 
