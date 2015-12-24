@@ -1,0 +1,76 @@
+The account of the insider trader is HAW65363779.
+
+1. The exchange leaks account information. When trying to cancel an order which
+   does not belong to you, the error message mentions the account which owns
+   it. Since order ids are assigned sequentially, we can determine all of the
+   accounts trading a given stock by sending a cancel on order 1, order 2, etc.
+
+2. The only authorization needed to watch the executions websocket is an
+   account, so after step 1, we can snoop on all of the executions happening
+   on the exchange.
+
+3. For each account, we can compute the fraction of trades which take liquidity.
+   From this, we see 3 market makers which only ever provide liquidity, and 72
+   noise traders which always take liquidity (always in the same direction,
+   with the same size, using market orders -- these are not our insider trader).
+   Finally, there are 25 more sophisticated active traders, which take liquidity
+   most of the time but not exclusively. There is a clear outlier; HAW65363779
+   takes liquidity about 75% of the time, while all other accounts are at least
+   10% more than that.
+
+HAW65363779    0.758333
+FAW32085550    0.880952
+BS81993704     0.888412
+LWB49121967    0.895652
+AS26262657     0.901554
+KS99692823     0.928571
+ME24340819     0.930108
+HAH2833964     0.933628
+BH38074852     0.935897
+RMB54544649    0.936306
+AAM89915021    0.936585
+RFB9214992     0.938095
+LMB64735493    0.939130
+FMB90560081    0.941748
+HAR66497148    0.945055
+SD14187212     0.949495
+SFS20985095    0.951327
+IKB464768      0.951351
+FDB71801215    0.955000
+MB59600216     0.957746
+SMS82400650    0.968944
+ABW99889773    0.970443
+JAS91119090    0.973451
+HS48425822     0.976190
+IDS41739528    0.994536
+
+
+4. The second piece of evidence pointing to HAW65363779 being anomalous is trade
+   size. If we plot the quantity of all trades across all accounts, we see
+   some large outliers which are several times larger than any other trades.
+   It turns out that all of the 10 largest trades were initiated by account
+   HAW65363779. Insider traders often trade in larger size than legitimate
+   traders, because they don't have to worry about risk.
+
+                                time      account   qty  price
+9811  2015-12-23T02:06:15.111343393Z  HAW65363779   469  10097
+1408  2015-12-23T01:51:40.095545563Z  HAW65363779   604   8811
+8567  2015-12-23T02:04:05.045325462Z  HAW65363779   727   9708
+2804  2015-12-23T01:54:24.501784899Z  HAW65363779  1014   8900
+4216   2015-12-23T01:56:45.30512202Z  HAW65363779  1122   9115
+3568  2015-12-23T01:55:39.904452205Z  HAW65363779  1676   9700
+8008  2015-12-23T02:03:09.889484728Z  HAW65363779  1728   9773
+6439   2015-12-23T02:00:40.00402966Z  HAW65363779  1791   9626
+4997  2015-12-23T01:58:09.940954277Z  HAW65363779  1915   9435
+9464  2015-12-23T02:05:40.075979283Z  HAW65363779  2298  10161
+
+
+5. Finally, we look more closely at HAW65363779's trading strategy, by plotting
+   their cumulative position over time. It appears that they accumulate a long
+   position relatively slowly (mostly by taking liquidity at opportune times),
+   and then sell quickly back down to (probably) zero, usually by providing
+   liquidity. This is a pretty good strategy for someone with a limited amount
+   of capital but with foreknowledge that the price is going to keep going up.
+
+6. Luckily, our insider trader doesn't seem to be very good at it. Many of the
+   other traders (presumably without inside information) made a lot more money!
